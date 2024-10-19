@@ -1,4 +1,7 @@
 import { Carousel } from "flowbite-react";
+import { CartService } from "./CartService";
+
+const cartService = new CartService();
 
 const images = [
   "/cenoura1.jpeg",
@@ -7,6 +10,10 @@ const images = [
 ];
 
 function AddCard() {
+  const handleBuy = () => {
+    cartService.addToCart(247, 1);
+  };
+
   return (
     <div className="relative">
       <div className="h-[50vh]">
@@ -53,7 +60,8 @@ function AddCard() {
           <button>
             <img src="/Group27.svg" alt="Ícone do botão" />
           </button>
-          <button className="w-[13.6875rem] h-[3.5rem] flex-shrink-0 rounded-[0.625rem] bg-[#FFA451] text-white font-medium text-lg">
+          <button className="w-[13.6875rem] h-[3.5rem] flex-shrink-0 rounded-[0.625rem] bg-[#FFA451] text-white font-medium text-lg"
+          onClick={handleBuy}>
             Comprar Agora
           </button>
         </div>

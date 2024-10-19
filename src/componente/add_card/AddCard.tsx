@@ -1,62 +1,88 @@
-import { useState } from "react";
-import BoraoCarrinho from "./BotaoCarrinho";
+import { useEffect, useState } from 'react';
+import { Produtos } from './CartService'; // Certifique-se de importar corretamente
+import BotaoCarrinho from './BotaoCarrinho';
+import Quantidade from './Quantidade';
+
+interface Produto {
+  productId: number;
+  name: string;
+  description: string;
+  price: number;
+  quantityAvalible: number;
+  imageCarrousel: string[];
+}
+
+export default function AddCard() {
+  const [produto, setProduto] = useState<Produto | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const produtosService = new Produtos();
+
+    async function fetchProduto() {
+      try {
+        const produtoData = await produtosService.getProduto(247); // Exemplo com produto ID 247
+        setProduto(produtoData);
+      } catch (error) {
+        setError('Erro ao carregar produto.');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchProduto();
+  }, []);
+
+  if (loading) return <p>Carregando produto...</p>;
+  if (error) return <p>{error}</p>;
+
+  if (!produto) return <p>Produto não encontrado.</p>;
+
+  const imagemProduto = produto.imageCarrousel.length > 0
+    ? produto.imageCarrousel[0]
+    : 'https://via.placeholder.com/300x300?text=Imagem+Indisponível';
 
 
-function AddCard() {
-  const [quantidade, setQuantidade] = useState(1);
 
-
-
-  const handleQuantityChange = (action: "aumenta" | "diminui") => {
-    setQuantidade((prevQuantidade) =>
-      action === "aumenta" ? prevQuantidade + 1 : Math.max(1, prevQuantidade - 1)
-    );
-  };
+    function formatarDinheiro(valor: string | number) {
+      const formatter = new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+      });
+      return formatter.format(parseFloat(valor.toString()));
+    }
 
   return (
-    <div className="relative w-[100%]">
+    <div className="relative w-[100%] mb-8">
+      {/* Imagem do Produto */}
       <div className="h-[50vh] w-full overflow-hidden">
-      <img src="/cenoura1.jpeg" alt="" />
+        <img
+          src={imagemProduto}
+          alt={produto.name}
+          className="h-full w-full object-cover"
+        />
       </div>
 
+      {/* Detalhes do Produto */}
       <div className="-mt-8 p-6 border rounded-t-[32px] bg-white relative z-20">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-semibold">Quinoa Fruit Salad</h2>
-          <p className="text-xl font-bold text-indigo-900">₦ 2,000</p>
+          <h2 className="text-2xl font-semibold">{produto.name}</h2>
+          <p className="text-xl font-bold text-indigo-900">{formatarDinheiro(produto.price)}</p>
         </div>
 
-        <div className="flex items-center gap-4 mb-6">
-          <button
-            className="w-8 h-8 border rounded-full flex items-center justify-center text-2xl"
-            onClick={() => handleQuantityChange("diminui")}
-          >
-            -
-          </button>
-          <span className="text-lg">{quantidade}</span>
-          <button
-            className="w-8 h-8 border rounded-full flex items-center justify-center text-2xl"
-            onClick={() => handleQuantityChange("aumenta")}
-          >
-            +
-          </button>
-        </div>
+        {/* Componente Quantidade */}
+        <Quantidade quantidadeMaxima={produto.quantityAvalible} />
 
         <div className="mb-4">
-          <h3 className="text-lg font-semibold">One Pack Contains:</h3>
+          <h3 className="text-lg font-semibold">Descrição:</h3>
           <hr className="w-20 border-t-2 border-orange-500 mt-1 mb-2" />
-          <p className="text-gray-700">
-            Red Quinoa, Lime, Honey, Blueberries, Strawberries, Mango, Fresh mint.
-          </p>
+          <p className="text-gray-700">{produto.description}</p>
         </div>
 
-        <p className="text-gray-600 mb-4">
-          If you are looking for a new fruit salad to eat today, quinoa is the perfect brunch for you.
-        </p>
-        <BoraoCarrinho />
-        
+        {/* Botão Adicionar ao Carrinho */}
+        <BotaoCarrinho produto={produto} />
       </div>
     </div>
   );
 }
-
-export default AddCard;

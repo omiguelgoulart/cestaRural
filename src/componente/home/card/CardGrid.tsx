@@ -19,6 +19,7 @@ export default function CardGrid() {
             try {
                 const response = await new Produtos().getTodosProdutos();
                 setProdutos(response.products);
+                console.log('Produtos:', response.products);
             } catch (error) {
                 console.error('Erro ao carregar produtos:', error);
             } finally {
@@ -31,13 +32,17 @@ export default function CardGrid() {
 
     if (carregando) return <p>Carregando produtos...</p>;
 
+    const handleProductClick = (productId: number) => {
+        navigate(`/produto/${productId}`);
+      };
+
     return (
         <div className="grid grid-cols-2 gap-4">
             {produtos.map((produto) => (
                 <div
                     key={produto.productId} // Correção: Adicionando uma key única para cada produto
                     className="p-4 border rounded-lg shadow-lg bg-white relative cursor-pointer"
-                    onClick={() => navigate(`/produto/${produto.productId}`)}
+                    onClick={() => handleProductClick(produto.productId)}
                 >
                     <img
                         src={produto.imageCarrousel[0] || 'https://via.placeholder.com/150'}

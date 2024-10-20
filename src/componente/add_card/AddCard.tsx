@@ -27,7 +27,7 @@ export default function AddCard() {
         const produtoData = await produtosService.getProduto(Number(id)); // Convertendo o ID para número
         setProduto(produtoData);
       } catch (error) {
-        setError('Erro ao carregar produto.');
+        setError('Erro ao carregar produto. '+ error);
       } finally {
         setLoading(false);
       }

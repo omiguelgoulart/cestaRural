@@ -12,19 +12,19 @@ interface Produto {
   quantityAvalible: number;
   imageCarrousel: string[];
 }
-const produtosService = new Produtos();
 
 export default function AddCard() {
-  const { productId } = useParams<{ productId: string }>(); // Pega o ID da URL
+  const { id } = useParams<{ id: string }>(); // Recebendo o ID da URL
   const [produto, setProduto] = useState<Produto | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    const produtosService = new Produtos();
 
     async function fetchProduto() {
       try {
-        const produtoData = await produtosService.getProduto(Number(productId));
+        const produtoData = await produtosService.getProduto(Number(id)); // Convertendo o ID para número
         setProduto(produtoData);
       } catch (error) {
         setError('Erro ao carregar produto.');
@@ -33,17 +33,29 @@ export default function AddCard() {
       }
     }
 
-    fetchProduto();
-  }, [productId]);
+    if (id) {
+      fetchProduto();
+    } else {
+      setError('Produto não encontrado.');
+      setLoading(false);
+    }
+  }, [id]);
 
   if (loading) return <p>Carregando produto...</p>;
   if (error) return <p>{error}</p>;
-
   if (!produto) return <p>Produto não encontrado.</p>;
 
   const imagemProduto = produto.imageCarrousel.length > 0
     ? produto.imageCarrousel[0]
     : 'https://via.placeholder.com/300x300?text=Imagem+Indisponível';
+
+  function formatarDinheiro(valor: string | number) {
+    const formatter = new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    });
+    return formatter.format(parseFloat(valor.toString()));
+  }
 
   return (
     <div className="relative w-[100%] mb-8">
@@ -59,7 +71,7 @@ export default function AddCard() {
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-semibold">{produto.name}</h2>
           <p className="text-xl font-bold text-indigo-900">
-            R$ {produto.price.toFixed(2)}
+            {formatarDinheiro(produto.price)}
           </p>
         </div>
 

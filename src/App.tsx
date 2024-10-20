@@ -1,18 +1,21 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import CardGrid from './componente/home/home'; // Grid de produtos
 import AddCard from './componente/add_card/AddCard'; // Página de produto detalhado
+import { CarrinhoProvider } from './componente/carrinho/CarrinhoContext';
+
 
 function App() {
   return (
-    <Router>
-      <div className="h-screen bg-gray-50">
+    <CarrinhoProvider>
+      <Router>
         <Routes>
-          <Route path="/" element={<CardGrid />} /> {/* Página inicial */}
-          <Route path="/produto/:id" element={<AddCard />} /> {/* Produto detalhado */}
+          <Route path="/" element={<CardGrid />} />
+          <Route path="/produto/:id" element={<AddCard />} />
         </Routes>
-      </div>
-    </Router>
+      </Router>
+    </CarrinhoProvider>
   );
 }
 
 export default App;
+

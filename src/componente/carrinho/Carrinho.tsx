@@ -1,6 +1,7 @@
+import { deflate } from 'zlib';
 import { useCarrinho } from './CarrinhoContext';
 
-export function Carrinho() {
+export default function Carrinho() {
   const { cart, removerDoCarrinho, limparCarrinho } = useCarrinho();
 
   const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);

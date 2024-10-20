@@ -1,23 +1,28 @@
-function Pesquisa() {
-    return(
-<div className=" mb-10 mt-5">
-
-<form className="max-w-md mx-auto">   
-    <label for="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Pesquisa</label>
-    <div className="relative">
-        <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-            <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-            </svg>
-        </div>
-        <input type="search" id="default-search" className="block w-full p-4 ps-10 text-sm text-gray-900 border rounded-[16px] border-gray-300 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Pesquisas de produto " required />
-        
-    </div>
-</form>
-
-
-</div>
-    )
-    
-}
-export default Pesquisa
+export default function Pesquisa() {
+    return (
+      <div className="my-6 mx-auto max-w-lg">
+        <form className="relative">
+          <input
+            type="search"
+            placeholder="Search for fruit salad combos"
+            className="w-full p-4 pl-12 text-sm rounded-lg border border-gray-300 bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="absolute left-4 top-4 h-6 w-6 text-gray-400"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M8 16l-4 4m0-4l4 4M12 10v4m4-4v4"
+            />
+          </svg>
+        </form>
+      </div>
+    );
+  }
+  

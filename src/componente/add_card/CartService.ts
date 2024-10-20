@@ -32,6 +32,7 @@ export class Produtos {
       const response = await axios.get(
         `https://cesta-rural-back.vercel.app/products`
       );
+      console.log('Produtos:', response.data);
       return response.data;
     } catch (error) {
       console.error('Erro ao buscar produtos:', error);
